@@ -6,6 +6,8 @@
     url={{ virtualbox_key }}
     state=present
   tags: virtualbox
+  register: pkg_result
+  until: pkg_result is success
 
 - name: Configure Oracle VirtualBox APT repository
   apt_repository: >
@@ -14,6 +16,7 @@
   tags: virtualbox
 
 - name: Install VirtualBox packages
-  apt: name={{ item }} state=present update_cache=yes
-  with_items: "{{ virtualbox_packages }}"
+  apt: name={{ virtualbox_packages }} state=present update_cache=yes
   tags: virtualbox
+  register: pkg_result
+  until: pkg_result is success
